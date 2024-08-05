@@ -22,7 +22,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 // Firebaseの初期化
-firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // バスレイアウトの生成
