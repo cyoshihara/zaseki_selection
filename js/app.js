@@ -24,6 +24,29 @@ const database = getDatabase(app);
 // 現在のユーザーの座席
 let currentUserSeat = null;
 
+// ユーザ選択のドロップダウン作成
+function generateUserSelect() {
+  const userSelect = document.getElementById('userSelect');
+  const usersRef = ref(database, 'users');
+  
+  get(usersRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+      userSelect.innerHTML = '<option value="">ユーザーを選択してください</option>';
+      for (const [key, name] of Object.entries(users)) {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        userSelect.appendChild(option);
+      }
+    } else {
+      console.log("ユーザーデータがありません");
+    }
+  }).catch((error) => {
+    console.error("ユーザーデータの取得エラー:", error);
+  });
+}
+
 // 座席選択の処理
 function selectSeat(seatNumber) {
   const user = document.getElementById('userSelect').value;
@@ -100,4 +123,9 @@ function generateBusLayout() {
 }
 
 // アプリの初期化
-generateBusLayout();
+function initializePage() {
+  generateUserSelect();
+  generateBusLayout();
+}
+
+initializePage();
