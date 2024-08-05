@@ -3,38 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ユーザー名登録</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>バス座席予約</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ユーザー名登録</h1>
-        <form id="nameForm">
-            <input type="text" id="userName" placeholder="あなたの名前を入力してください" required>
-            <button type="submit">座席選択へ進む</button>
-        </form>
-    </div>
+    <h1>バス座席予約</h1>
+    <select id="userSelect">
+        <option value="">名前を選択してください</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+    </select>
+    <div id="busLayout"></div>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script>
-        // Firebaseの設定
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            databaseURL: "YOUR_DATABASE_URL",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        firebase.initializeApp(firebaseConfig);
-
-        document.getElementById('nameForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const userName = document.getElementById('userName').value;
-            localStorage.setItem('userName', userName);
-            window.location.href = 'seat-selection.html';
-        });
-    </script>
+    <script src="js/app.js"></script>
 </body>
 </html>
