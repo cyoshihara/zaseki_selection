@@ -20,6 +20,19 @@
         <option value="サトシ">サトシ</option>
         <option value="ジャック">ジャック</option>
     </select> -->
+    
+    <form id="addUserForm">
+      <input type="text" id="newUserName" placeholder="新しいユーザー名">
+      <button type="submit">追加</button>
+    </form>
+    
+    <form id="deleteUserForm">
+      <select id="deleteUserSelect">
+        <option value="">選択</option>
+      </select>
+      <button type="submit">削除</button>
+    </form>    
+
     <div id="busLayout"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js" type="module"></script>

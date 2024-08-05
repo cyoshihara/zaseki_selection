@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
-import { getDatabase, ref, get, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
+import { getDatabase, ref, get, set, onValue, remove, push } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,6 +24,38 @@ const database = getDatabase(app);
 // 現在のユーザーの座席
 let currentUserSeat = null;
 
+// ユーザー追加の処理
+function addUser(userName) {
+  const usersRef = ref(database, 'users');
+  push(usersRef, userName).then(() => {
+    console.log('ユーザーが追加されました');
+    generateUserSelect(); // ドロップダウンを更新
+  }).catch((error) => {
+    console.error("ユーザー追加エラー:", error);
+  });
+}
+
+// ユーザー削除の処理
+function deleteUser(userName) {
+  const usersRef = ref(database, 'users');
+  get(usersRef).then((snapshot) => {
+    const users = snapshot.val();
+    const userKey = Object.keys(users).find(key => users[key] === userName);
+    if (userKey) {
+      remove(ref(database, `users/${userKey}`)).then(() => {
+        console.log('ユーザーが削除されました');
+        generateUserSelect(); // ドロップダウンを更新
+      }).catch((error) => {
+        console.error("ユーザー削除エラー:", error);
+      });
+    } else {
+      console.log('ユーザーが見つかりません');
+    }
+  }).catch((error) => {
+    console.error("ユーザー取得エラー:", error);
+  });
+}
+
 // ユーザ選択のドロップダウン作成
 function generateUserSelect() {
   const userSelect = document.getElementById('userSelect');
@@ -39,12 +71,25 @@ function generateUserSelect() {
         option.textContent = name;
         userSelect.appendChild(option);
       }
+      generateDeleteUserSelect(users); // 削除用ドロップダウンも更新
     } else {
       console.log("ユーザーデータがありません");
     }
   }).catch((error) => {
     console.error("ユーザーデータの取得エラー:", error);
   });
+}
+
+// 削除用ユーザー選択ドロップダウンの生成
+function generateDeleteUserSelect(users) {
+  const deleteUserSelect = document.getElementById('deleteUserSelect');
+  deleteUserSelect.innerHTML = '<option value="">削除するユーザーを選択</option>';
+  for (const [key, name] of Object.entries(users)) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    deleteUserSelect.appendChild(option);
+  }
 }
 
 // 座席選択の処理
@@ -122,9 +167,46 @@ function generateBusLayout() {
   }
 }
 
+
+function addEventListeners() {
+  // ユーザー追加フォームのイベントリスナー
+  document.getElementById('addUserForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const newUserName = document.getElementById('newUserName').value;
+    if (newUserName) {
+      addUser(newUserName);
+      document.getElementById('newUserName').value = ''; // フォームをクリア
+    } else {
+      alert('ユーザー名を入力してください');
+    }
+  });
+
+  // ユーザー削除フォームのイベントリスナー
+  document.getElementById('deleteUserForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const deleteUserName = document.getElementById('deleteUserSelect').value;
+    if (deleteUserName) {
+      // 確認ダイアログを表示
+      const confirmDelete = confirm(`本当に「${deleteUserName}」を削除しますか？`);
+      if (confirmDelete) {
+        deleteUser(deleteUserName);
+      }
+      else {
+        console.log('削除がキャンセルされました');
+      }
+
+      // deleteUser(deleteUserName);
+      // document.getElementById('deleteUserSelect').value = ''; // フォームをクリア
+    } else {
+      alert('削除するユーザー名を入力してください');
+    }
+  });
+}
+
 // アプリの初期化
 function initializePage() {
-  generateUserSelect();
+  addEventListeners();
+  generateUserSelect();  
   generateBusLayout();
 }
 
