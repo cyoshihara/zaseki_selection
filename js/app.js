@@ -89,6 +89,13 @@ function generateBusLayout() {
     seat.textContent = i;
     seat.onclick = () => selectSeat(i);
     busLayout.appendChild(seat);
+
+    // 通路を表現するためのスペースを追加
+    if (i % 2 === 0 && i % 4 != 0) { // 例えば4席ごとに通路を入れる
+      const aisle = document.createElement('div');
+      aisle.className = 'aisle';
+      busLayout.appendChild(aisle);
+    }    
   }
 }
 
