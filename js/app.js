@@ -31,28 +31,32 @@ function selectSeat(seatNumber) {
     alert('先に名前を選択してください');
     return;
   }
-
-  const seatRef = ref(database, 'seats');
-  get(seatRef).then((snapshot) => {
+  const seatsRef = ref(database, 'seats');
+  get(seatsRef).then((snapshot) => {
     const seats = snapshot.val() || {};
     const userCurrentSeat = Object.keys(seats).find(key => seats[key] === user);
 
-    if (userCurrentSeat && userCurrentSeat === String(seatNumber)) {
+    // 他のユーザーが選択している座席かチェック
+    if (seats[seatNumber] && seats[seatNumber] !== user) {
+      alert('この座席は既に他のユーザーによって選択されています');
+      return;
+    }
+
+    if (userCurrentSeat === String(seatNumber)) {
       // 自分の座席をもう一度クリックした場合、クリアする
       remove(ref(database, `seats/${seatNumber}`));
-      currentUserSeat = null;
-    } else if (userCurrentSeat && userCurrentSeat !== String(seatNumber)) {
-      // 自分の座席を変更する場合
-      remove(ref(database, `seats/${userCurrentSeat}`));
-      set(ref(database, `seats/${seatNumber}`), user);
-      currentUserSeat = seatNumber;
-    } else if (!seats[seatNumber]) {
-      // 新しく座席を選択する場合
-      set(ref(database, `seats/${seatNumber}`), user);
-      currentUserSeat = seatNumber;
     } else {
-      alert('この座席は既に選択されています');
+      // 新しい座席を選択する場合
+      if (userCurrentSeat) {
+        // 既存の座席を解除
+        remove(ref(database, `seats/${userCurrentSeat}`));
+      }
+      // 新しい座席を設定
+      set(ref(database, `seats/${seatNumber}`), user);
     }
+  }).catch((error) => {
+    console.error("Error selecting seat: ", error);
+    alert('座席の選択中にエラーが発生しました');
   });
 }
 
