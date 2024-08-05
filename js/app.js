@@ -1,13 +1,25 @@
-// Firebaseの設定（自分のプロジェクトの設定に置き換えてください）
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDTGAqHzo_aDPMLw07rhuxFf3XsESkKizw",
+  authDomain: "zaseki-selection.firebaseapp.com",
+  databaseURL: "https://zaseki-selection-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "zaseki-selection",
+  storageBucket: "zaseki-selection.appspot.com",
+  messagingSenderId: "856825978521",
+  appId: "1:856825978521:web:236077a10a22b4cd26a208",
+  measurementId: "G-L0MLC8DV70"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Firebaseの初期化
 firebase.initializeApp(firebaseConfig);
