@@ -150,7 +150,7 @@ onValue(seatsRef, (snapshot) => {
 // バスレイアウトの生成
 function generateBusLayout() {
   const busLayout = document.getElementById('busLayout');
-  for (let i = 1; i <= 40; i++) {
+  for (let i = 1; i <= 44; i++) {
     const seat = document.createElement('div');
     seat.className = 'seat';
     seat.id = `seat-${i}`;
