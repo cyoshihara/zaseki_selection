@@ -132,7 +132,7 @@ function selectSeat(seatNumber) {
 const seatsRef = ref(database, 'seats');
 onValue(seatsRef, (snapshot) => {
   const seats = snapshot.val() || {};
-  for (let i = 1; i <= 40; i++) {
+  for (let i = 1; i <= 44; i++) {
     const seatElement = document.getElementById(`seat-${i}`);
     if (seats[i]) {
       seatElement.textContent = `${i}: ${seats[i]}`;
